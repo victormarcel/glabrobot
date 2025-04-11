@@ -67,26 +67,30 @@ The `glabrobot` CLI supports the following commands and parameters:
 
 #### Issue Parameters
 Use these parameters when working with issues:
-- `--title`: The title of the issue.
-- `--description`: A description of the issue.
-- `--assignee`: The ID of the assignee for the issue.
+- `-t`: Specifies the title of the issue.
+- `-d`: Specifies the description of the issue.
+- `-e`: Specifies the epic ID associated with the issue.
+- `-w`: Specifies the weight of the issue.
 
 #### Merge Request Parameters
 Use these parameters when working with merge requests:
-- `--source-branch`: The source branch for the merge request.
-- `--target-branch`: The target branch for the merge request.
-- `--reviewer`: The ID of the reviewer for the merge request.
+- `-s`: Specifies the source branch for the merge request.
+- `-t`: Specifies the title of the merge request.
+- `--target-branch`: Specifies the target branch where the changes will be merged.
+- `--issue-title`: Specifies the title of the related issue for the merge request.
+- `--issue-description`: Specifies the description of the related issue for the merge request.
+- `-r`: Specifies the ID of the related issue associated with the merge request.
 
 ### Example Usage
 
 #### Creating an Issue
 ```bash
-glabrobot issue create --title "Fix Bug" --description "Fixes a critical bug" --assignee 123
+glabrobot issue create -t "Fix Bug" -d "Fixes a critical bug" -e 99 -w 2
 ```
 
 #### Creating a Merge Request
 ```bash
-glabrobot mr create --source-branch feature/bugfix --target-branch main --reviewer 456
+glabrobot mr create -s feature/bugfix --target-branch main
 ```
 
 For further details, refer to the source code and comments within the project.
