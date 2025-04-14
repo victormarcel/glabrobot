@@ -7,4 +7,5 @@ var IssueParameter;
     IssueParameter["Description"] = "-d";
     IssueParameter["EpicId"] = "-e";
     IssueParameter["Weight"] = "-w";
+    IssueParameter["Labels"] = "-l";
 })(IssueParameter || (exports.IssueParameter = IssueParameter = {}));

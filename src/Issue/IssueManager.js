@@ -17,7 +17,6 @@ const axios_1 = __importDefault(require("axios"));
 const Constants_1 = require("../Commons/Constants");
 const CommandLineManager_1 = require("../Commons/Command Line/CommandLineManager");
 const IssueAction_1 = require("./Models/IssueAction");
-const Labels_1 = require("../Commons/Enums/Labels");
 const ConfigManager_1 = require("../Commons/Config/ConfigManager");
 const IssueParameter_1 = require("./Models/IssueParameter");
 class IssueManager {
@@ -26,7 +25,7 @@ class IssueManager {
             let issueAction = CommandLineManager_1.CommandLineManager.extractParameter(IssueAction_1.IssueAction.Main);
             switch (issueAction) {
                 case IssueAction_1.IssueAction.Create: {
-                    this.createIssue(CommandLineManager_1.CommandLineManager.extractParameter(IssueParameter_1.IssueParameter.Title), CommandLineManager_1.CommandLineManager.extractParameter(IssueParameter_1.IssueParameter.Description));
+                    this.createIssue(CommandLineManager_1.CommandLineManager.extractParameter(IssueParameter_1.IssueParameter.Title) || "", CommandLineManager_1.CommandLineManager.extractParameter(IssueParameter_1.IssueParameter.Description) || "");
                     break;
                 }
                 case IssueAction_1.IssueAction.List: {
@@ -48,15 +47,7 @@ class IssueManager {
                 description: description,
                 epic_id: CommandLineManager_1.CommandLineManager.extractParameter(IssueParameter_1.IssueParameter.EpicId),
                 weight: CommandLineManager_1.CommandLineManager.extractParameter(IssueParameter_1.IssueParameter.Weight),
-                labels: [
-                    Labels_1.Labels.Platform_IOS,
-                    Labels_1.Labels.Priority_Medium,
-                    Labels_1.Labels.Product_Pfj,
-                    Labels_1.Labels.Solution_PaymentsMobileIosWallet,
-                    Labels_1.Labels.Squad_Wallet,
-                    Labels_1.Labels.Type_Task,
-                    Labels_1.Labels.Workflow_New
-                ]
+                labels: (CommandLineManager_1.CommandLineManager.extractParameter(IssueParameter_1.IssueParameter.Labels) || "").split(",")
             };
             try {
                 const response = yield axios_1.default.post(Constants_1.HttpConstants.issueEndpoint, data, { headers: Constants_1.HttpConstants.commomHeaders });

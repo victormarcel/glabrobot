@@ -2,7 +2,6 @@ import axios from "axios";
 import { HttpConstants } from "../Commons/Constants";
 import { CommandLineManager } from "../Commons/Command Line/CommandLineManager";
 import { IssueAction } from "./Models/IssueAction";
-import { Labels } from "../Commons/Enums/Labels";
 import { ConfigManager } from "../Commons/Config/ConfigManager";
 import { IssueParameter } from "./Models/IssueParameter";
 
@@ -13,8 +12,8 @@ export class IssueManager {
         switch (issueAction) {
             case IssueAction.Create: {
                 this.createIssue(
-                    CommandLineManager.extractParameter(IssueParameter.Title), 
-                    CommandLineManager.extractParameter(IssueParameter.Description)
+                    CommandLineManager.extractParameter(IssueParameter.Title) || "", 
+                    CommandLineManager.extractParameter(IssueParameter.Description) || ""
                 );
                 break;
             }
@@ -36,15 +35,7 @@ export class IssueManager {
             description: description,
             epic_id: CommandLineManager.extractParameter(IssueParameter.EpicId),
             weight: CommandLineManager.extractParameter(IssueParameter.Weight),
-            labels: [
-                Labels.Platform_IOS,
-                Labels.Priority_Medium,
-                Labels.Product_Pfj,
-                Labels.Solution_PaymentsMobileIosWallet,
-                Labels.Squad_Wallet,
-                Labels.Type_Task,
-                Labels.Workflow_New
-            ]
+            labels: (CommandLineManager.extractParameter(IssueParameter.Labels) || "").split(",")
         };
 
         try {

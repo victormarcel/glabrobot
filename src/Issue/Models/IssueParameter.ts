@@ -2,5 +2,6 @@ export enum IssueParameter {
     Title = "-t",
     Description = "-d",
     EpicId = "-e",
-    Weight = "-w"
+    Weight = "-w",
+    Labels = "-l"
 }

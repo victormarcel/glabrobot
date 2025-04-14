@@ -15,7 +15,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.MergeRequestManager = void 0;
 const axios_1 = __importDefault(require("axios"));
 const CommandLineManager_1 = require("../Commons/Command Line/CommandLineManager");
-const Labels_1 = require("../Commons/Enums/Labels");
 const Constants_1 = require("../Commons/Constants");
 const MergeRequestAction_1 = require("./Models/MergeRequestAction");
 const IssueManager_1 = require("../Issue/IssueManager");
@@ -42,30 +41,26 @@ class MergeRequestManager {
             const issueIid = yield this.getRelatedIssueIid();
             const mrTitle = (yield GitManager_1.GitManager.getCommitLastDescription()) || "";
             const sourceBranch = (yield GitManager_1.GitManager.getCurrentBranch()) || "";
-            const data = {
-                assignee_id: ConfigManager_1.ConfigManager.getAssigneeId(),
-                reviewer_ids: ConfigManager_1.ConfigManager.getReviewerIds(),
-                source_branch: sourceBranch,
-                target_branch: CommandLineManager_1.CommandLineManager.extractParameter(MergeRequestParameter_1.MergeRequesParameters.TargetBranch),
-                title: mrTitle,
-                description: `Related to #${issueIid}`,
-                labels: [
-                    Labels_1.Labels.Platform_IOS,
-                    Labels_1.Labels.Squad_Wallet,
-                    Labels_1.Labels.Solution_PaymentsMobileIosWallet,
-                    Labels_1.Labels.Round_1,
-                    Labels_1.Labels.Regressive_NewFeature,
-                    Labels_1.Labels.Tribe_Transactional
-                ],
-                milestone_id: ConfigManager_1.ConfigManager.getMilestoneId(),
-                remove_source_branch: true
-            };
-            try {
-                const response = yield axios_1.default.post(Constants_1.HttpConstants.mergeRequestEndpoint, data, { headers: Constants_1.HttpConstants.commomHeaders });
-                console.log('Merge request created:', response.data);
-            }
-            catch (error) {
-                console.error('There was an error creating the merge request:', error);
+            const targetBranch = CommandLineManager_1.CommandLineManager.extractParameter(MergeRequestParameter_1.MergeRequesParameters.TargetBranch);
+            if (targetBranch) {
+                const data = {
+                    assignee_id: ConfigManager_1.ConfigManager.getAssigneeId(),
+                    reviewer_ids: ConfigManager_1.ConfigManager.getReviewerIds(),
+                    source_branch: sourceBranch,
+                    target_branch: targetBranch,
+                    title: mrTitle,
+                    description: `Related to #${issueIid}`,
+                    labels: (CommandLineManager_1.CommandLineManager.extractParameter(MergeRequestParameter_1.MergeRequesParameters.Labels) || "").split(","),
+                    milestone_id: ConfigManager_1.ConfigManager.getMilestoneId(),
+                    remove_source_branch: true
+                };
+                try {
+                    const response = yield axios_1.default.post(Constants_1.HttpConstants.mergeRequestEndpoint, data, { headers: Constants_1.HttpConstants.commomHeaders });
+                    console.log('Merge request created:', response.data);
+                }
+                catch (error) {
+                    console.error('There was an error creating the merge request:', error);
+                }
             }
         });
     }
@@ -77,7 +72,7 @@ class MergeRequestManager {
             }
             const title = CommandLineManager_1.CommandLineManager.extractParameter(MergeRequestParameter_1.MergeRequesParameters.IssueTitle);
             if (title) {
-                const description = CommandLineManager_1.CommandLineManager.extractParameter(MergeRequestParameter_1.MergeRequesParameters.IssueDescription);
+                const description = CommandLineManager_1.CommandLineManager.extractParameter(MergeRequestParameter_1.MergeRequesParameters.IssueDescription) || "";
                 let issueManager = new IssueManager_1.IssueManager();
                 const issueData = yield issueManager.createIssue(title, description);
                 return issueData === null || issueData === void 0 ? void 0 : issueData.iid;

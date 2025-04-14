@@ -71,26 +71,36 @@ Use these parameters when working with issues:
 - `-d`: Specifies the description of the issue.
 - `-e`: Specifies the epic ID associated with the issue.
 - `-w`: Specifies the weight of the issue.
+- `-l`: Add label by name. Multiple labels should be comma-separated.
 
 #### Merge Request Parameters
 Use these parameters when working with merge requests:
-- `-s`: Specifies the source branch for the merge request.
 - `-t`: Specifies the title of the merge request.
 - `--target-branch`: Specifies the target branch where the changes will be merged.
 - `--issue-title`: Specifies the title of the related issue for the merge request.
 - `--issue-description`: Specifies the description of the related issue for the merge request.
 - `-r`: Specifies the ID of the related issue associated with the merge request.
+- `-l`: Add label by name. Multiple labels should be comma-separated.
 
 ### Example Usage
 
 #### Creating an Issue
 ```bash
-glabrobot issue create -t "Fix Bug" -d "Fixes a critical bug" -e 99 -w 2
+glabrobot issue create \
+  -t "[ISSUE_TITLE]" \
+  -d "[ISSUE_DESCRIPTION]" \
+  -e [EPIC_ID] \
+  -w [WEIGHT] \
+  -l "LABEL,..."
 ```
 
 #### Creating a Merge Request
 ```bash
-glabrobot mr create -s feature/bugfix --target-branch main
+glabrobot mr create \
+  --target-branch "[TARGET_BRANCH]" \
+  --issue-title "[ISSUE_TITLE]" \
+  --issue-description "[ISSUE_DESCRIPTION]" \
+  -l "LABEL,..."
 ```
 
 For further details, refer to the source code and comments within the project.

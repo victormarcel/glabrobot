@@ -1,6 +1,5 @@
 import axios, { AxiosResponse } from "axios";
 import { CommandLineManager } from "../Commons/Command Line/CommandLineManager";
-import { Labels } from "../Commons/Enums/Labels";
 import { MergeRequestData } from "./Models/MergeRequestData";
 import { HttpConstants } from "../Commons/Constants";
 import { MergeRequestAction } from "./Models/MergeRequestAction";
@@ -28,31 +27,27 @@ export class MergeRequestManager {
         const issueIid = await this.getRelatedIssueIid();
         const mrTitle = await GitManager.getCommitLastDescription() || "";
         const sourceBranch = await GitManager.getCurrentBranch() || "";
+        const targetBranch = CommandLineManager.extractParameter(MergeRequesParameters.TargetBranch)
 
-        const data: MergeRequestData = {
-            assignee_id: ConfigManager.getAssigneeId(),
-            reviewer_ids: ConfigManager.getReviewerIds(),
-            source_branch: sourceBranch,
-            target_branch: CommandLineManager.extractParameter(MergeRequesParameters.TargetBranch),
-            title: mrTitle,
-            description: `Related to #${issueIid}`,
-            labels: [
-                Labels.Platform_IOS,
-                Labels.Squad_Wallet,
-                Labels.Solution_PaymentsMobileIosWallet,
-                Labels.Round_1,
-                Labels.Regressive_NewFeature,
-                Labels.Tribe_Transactional
-            ],
-            milestone_id: ConfigManager.getMilestoneId(),
-            remove_source_branch: true
-        };
-
-        try {
-            const response: AxiosResponse = await axios.post(HttpConstants.mergeRequestEndpoint, data, { headers: HttpConstants.commomHeaders });
-            console.log('Merge request created:', response.data);
-        } catch (error) {
-            console.error('There was an error creating the merge request:', error);
+        if (targetBranch) {
+            const data: MergeRequestData = {
+                assignee_id: ConfigManager.getAssigneeId(),
+                reviewer_ids: ConfigManager.getReviewerIds(),
+                source_branch: sourceBranch,
+                target_branch: targetBranch,
+                title: mrTitle,
+                description: `Related to #${issueIid}`,
+                labels: (CommandLineManager.extractParameter(MergeRequesParameters.Labels) || "").split(","),
+                milestone_id: ConfigManager.getMilestoneId(),
+                remove_source_branch: true
+            };
+    
+            try {
+                const response: AxiosResponse = await axios.post(HttpConstants.mergeRequestEndpoint, data, { headers: HttpConstants.commomHeaders });
+                console.log('Merge request created:', response.data);
+            } catch (error) {
+                console.error('There was an error creating the merge request:', error);
+            }
         }
     }
 
@@ -66,7 +61,7 @@ export class MergeRequestManager {
 
         const title = CommandLineManager.extractParameter(MergeRequesParameters.IssueTitle);
         if (title) {
-            const description = CommandLineManager.extractParameter(MergeRequesParameters.IssueDescription);
+            const description = CommandLineManager.extractParameter(MergeRequesParameters.IssueDescription) || "";
             let issueManager = new IssueManager();
             const issueData = await issueManager.createIssue(title, description);
 

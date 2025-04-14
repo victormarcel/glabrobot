@@ -8,11 +8,13 @@ var CommandLineParameter;
 const args = process.argv.slice(2);
 class CommandLineManager {
     static getMainAction() {
-        return this.extractParameter(CommandLineParameter.MainAction);
+        return args[0];
     }
     static extractParameter(parameter) {
-        let parameterIndex = args.indexOf(parameter) + 1;
-        return args[parameterIndex];
+        let parameterIndex = args.indexOf(parameter);
+        if (parameterIndex >= 0) {
+            return args[parameterIndex + 1];
+        }
     }
 }
 exports.CommandLineManager = CommandLineManager;

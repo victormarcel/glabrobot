@@ -9,27 +9,29 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const GitManager_1 = require("./src/Commons/Git/GitManager");
+const CommandLineManager_1 = require("./src/Commons/Command Line/CommandLineManager");
+const IssueManager_1 = require("./src/Issue/IssueManager");
+const MergeRequestAction_1 = require("./src/Merge Request/Models/MergeRequestAction");
+const IssueAction_1 = require("./src/Issue/Models/IssueAction");
+const MergeRequestManager_1 = require("./src/Merge Request/MergeRequestManager");
 function main() {
     return __awaiter(this, void 0, void 0, function* () {
-        let branch = yield GitManager_1.GitManager.getCommitLastDescription();
-        console.log(branch);
-        // const mainAction = CommandLineManager.getMainAction();
-        // switch (mainAction) {
-        //     case MergeRequestAction.Main: {
-        //         const manager = new MergeRequestManager();
-        //         manager.performAction();
-        //         break;
-        //     }
-        //     case IssueAction.Main: {
-        //         const manager = new IssueManager();
-        //         manager.performAction();
-        //         break;
-        //     }
-        //     default: {
-        //         console.log(`GitLab Robot: command not found: ${mainAction}`)
-        //     }
-        // }
+        const mainAction = CommandLineManager_1.CommandLineManager.getMainAction();
+        switch (mainAction) {
+            case MergeRequestAction_1.MergeRequestAction.Main: {
+                const manager = new MergeRequestManager_1.MergeRequestManager();
+                manager.performAction();
+                break;
+            }
+            case IssueAction_1.IssueAction.Main: {
+                const manager = new IssueManager_1.IssueManager();
+                manager.performAction();
+                break;
+            }
+            default: {
+                console.log(`GitLab Robot: command not found: ${mainAction}`);
+            }
+        }
     });
 }
 main();
