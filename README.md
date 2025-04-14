@@ -29,7 +29,7 @@ Create a `config.json` file in the root directory of the project. Use the follow
 {
     "projectId": 999,
     "assigneeId": 999,
-    "reviewer_ids": [999],
+    "reviewerIds": [999],
     "milestoneId": 999
 }
 ```
@@ -80,6 +80,7 @@ Use these parameters when working with merge requests:
 - `--issue-title`: Specifies the title of the related issue for the merge request.
 - `--issue-description`: Specifies the description of the related issue for the merge request.
 - `-r`: Specifies the ID of the related issue associated with the merge request.
+- `-c`: Specifies the ID of the issue to be closed.
 - `-l`: Add label by name. Multiple labels should be comma-separated.
 
 ### Example Usage

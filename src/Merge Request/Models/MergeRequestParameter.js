@@ -8,5 +8,6 @@ var MergeRequesParameters;
     MergeRequesParameters["IssueTitle"] = "--issue-title";
     MergeRequesParameters["IssueDescription"] = "--issue-description";
     MergeRequesParameters["RelatedIssue"] = "-r";
+    MergeRequesParameters["IssueToClose"] = "-c";
     MergeRequesParameters["Labels"] = "-l";
 })(MergeRequesParameters || (exports.MergeRequesParameters = MergeRequesParameters = {}));

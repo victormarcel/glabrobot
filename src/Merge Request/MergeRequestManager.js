@@ -38,8 +38,8 @@ class MergeRequestManager {
     }
     createMergeRequest() {
         return __awaiter(this, void 0, void 0, function* () {
-            const issueIid = yield this.getRelatedIssueIid();
-            const mrTitle = (yield GitManager_1.GitManager.getCommitLastDescription()) || "";
+            const title = (yield GitManager_1.GitManager.getCommitLastDescription()) || "";
+            const description = (yield this.createDescriptionByExistingIssue()) || "";
             const sourceBranch = (yield GitManager_1.GitManager.getCurrentBranch()) || "";
             const targetBranch = CommandLineManager_1.CommandLineManager.extractParameter(MergeRequestParameter_1.MergeRequesParameters.TargetBranch);
             if (targetBranch) {
@@ -48,8 +48,8 @@ class MergeRequestManager {
                     reviewer_ids: ConfigManager_1.ConfigManager.getReviewerIds(),
                     source_branch: sourceBranch,
                     target_branch: targetBranch,
-                    title: mrTitle,
-                    description: `Related to #${issueIid}`,
+                    title: title,
+                    description: description,
                     labels: (CommandLineManager_1.CommandLineManager.extractParameter(MergeRequestParameter_1.MergeRequesParameters.Labels) || "").split(","),
                     milestone_id: ConfigManager_1.ConfigManager.getMilestoneId(),
                     remove_source_branch: true
@@ -64,11 +64,26 @@ class MergeRequestManager {
             }
         });
     }
+    createDescriptionByExistingIssue() {
+        return __awaiter(this, void 0, void 0, function* () {
+            const relatedIssueIid = yield this.getRelatedIssueIid();
+            if (relatedIssueIid) {
+                const relatedIssue = CommandLineManager_1.CommandLineManager.extractParameter(MergeRequestParameter_1.MergeRequesParameters.RelatedIssue);
+                const issueToClose = CommandLineManager_1.CommandLineManager.extractParameter(MergeRequestParameter_1.MergeRequesParameters.IssueToClose);
+                if (relatedIssue) {
+                    return `Related to #${relatedIssueIid}`;
+                }
+                else if (issueToClose) {
+                    return `Closes #${relatedIssueIid}`;
+                }
+            }
+        });
+    }
     getRelatedIssueIid() {
         return __awaiter(this, void 0, void 0, function* () {
-            const relatedIssueIid = CommandLineManager_1.CommandLineManager.extractParameter(MergeRequestParameter_1.MergeRequesParameters.RelatedIssue);
-            if (relatedIssueIid) {
-                return relatedIssueIid;
+            const existingIssueIid = CommandLineManager_1.CommandLineManager.extractParameter(MergeRequestParameter_1.MergeRequesParameters.RelatedIssue) || CommandLineManager_1.CommandLineManager.extractParameter(MergeRequestParameter_1.MergeRequesParameters.IssueToClose);
+            if (existingIssueIid) {
+                return existingIssueIid;
             }
             const title = CommandLineManager_1.CommandLineManager.extractParameter(MergeRequestParameter_1.MergeRequesParameters.IssueTitle);
             if (title) {

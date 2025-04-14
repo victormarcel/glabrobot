@@ -24,8 +24,8 @@ export class MergeRequestManager {
     }
 
     private async createMergeRequest(): Promise<void> {
-        const issueIid = await this.getRelatedIssueIid();
-        const mrTitle = await GitManager.getCommitLastDescription() || "";
+        const title = await GitManager.getCommitLastDescription() || "";
+        const description = await this.createDescriptionByExistingIssue() || "";
         const sourceBranch = await GitManager.getCurrentBranch() || "";
         const targetBranch = CommandLineManager.extractParameter(MergeRequesParameters.TargetBranch)
 
@@ -35,8 +35,8 @@ export class MergeRequestManager {
                 reviewer_ids: ConfigManager.getReviewerIds(),
                 source_branch: sourceBranch,
                 target_branch: targetBranch,
-                title: mrTitle,
-                description: `Related to #${issueIid}`,
+                title: title,
+                description: description,
                 labels: (CommandLineManager.extractParameter(MergeRequesParameters.Labels) || "").split(","),
                 milestone_id: ConfigManager.getMilestoneId(),
                 remove_source_branch: true
@@ -51,12 +51,25 @@ export class MergeRequestManager {
         }
     }
 
-    private async getRelatedIssueIid(): Promise<string | undefined> {
-
-        const relatedIssueIid = CommandLineManager.extractParameter(MergeRequesParameters.RelatedIssue);
-
+    private async createDescriptionByExistingIssue(): Promise<string | undefined> {
+        const relatedIssueIid = await this.getRelatedIssueIid()
         if (relatedIssueIid) {
-            return relatedIssueIid
+            const relatedIssue = CommandLineManager.extractParameter(MergeRequesParameters.RelatedIssue)
+            const issueToClose = CommandLineManager.extractParameter(MergeRequesParameters.IssueToClose)
+            
+            if (relatedIssue) {
+                return `Related to #${relatedIssueIid}`
+            } else if (issueToClose) {
+                return `Closes #${relatedIssueIid}`
+            }
+        }
+    }
+
+    private async getRelatedIssueIid(): Promise<string | undefined> {
+        const existingIssueIid = CommandLineManager.extractParameter(MergeRequesParameters.RelatedIssue) || CommandLineManager.extractParameter(MergeRequesParameters.IssueToClose);
+
+        if (existingIssueIid) {
+            return existingIssueIid
         }
 
         const title = CommandLineManager.extractParameter(MergeRequesParameters.IssueTitle);
