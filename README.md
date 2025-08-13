@@ -29,8 +29,7 @@ Create a `config.json` file in the root directory of the project. Use the follow
 {
     "projectId": 999,
     "assigneeId": 999,
-    "reviewerIds": [999],
-    "milestoneId": 999
+    "reviewerIds": [999]
 }
 ```
 
@@ -72,6 +71,7 @@ Use these parameters when working with issues:
 - `-e`: Specifies the epic ID associated with the issue.
 - `-w`: Specifies the weight of the issue.
 - `-l`: Add label by name. Multiple labels should be comma-separated.
+- `-m`: Specifies the milestone ID.
 
 #### Merge Request Parameters
 Use these parameters when working with merge requests:
@@ -82,17 +82,19 @@ Use these parameters when working with merge requests:
 - `-r`: Specifies the ID of the related issue associated with the merge request.
 - `-c`: Specifies the ID of the issue to be closed.
 - `-l`: Add label by name. Multiple labels should be comma-separated.
+- `-m`: Specifies the milestone ID.
 
 ### Example Usage
 
 #### Creating an Issue
 ```bash
 glabrobot issue create \
-  -t "[ISSUE_TITLE]" \
-  -d "[ISSUE_DESCRIPTION]" \
+  -t [ISSUE_TITLE] \
+  -d [ISSUE_DESCRIPTION] \
   -e [EPIC_ID] \
+  -m [MILESTONE_ID] \
   -w [WEIGHT] \
-  -l "LABEL,..."
+  -l [LABEL, ...]
 ```
 
 #### Creating a Merge Request
@@ -101,6 +103,7 @@ glabrobot mr create \
   --target-branch "[TARGET_BRANCH]" \
   --issue-title "[ISSUE_TITLE]" \
   --issue-description "[ISSUE_DESCRIPTION]" \
+  -m [MILESTONE_ID] \
   -l "LABEL,..."
 ```
 

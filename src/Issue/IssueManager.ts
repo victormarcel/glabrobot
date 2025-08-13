@@ -30,7 +30,7 @@ export class IssueManager {
     async createIssue(title: string, description: string): Promise<Record<string, any> | undefined> {
         const data = {
             assignee_id: ConfigManager.getAssigneeId(),
-            milestone_id: ConfigManager.getMilestoneId(),
+            milestone_id: CommandLineManager.extractParameter(IssueParameter.Milestone),
             title: title,
             description: description,
             epic_id: CommandLineManager.extractParameter(IssueParameter.EpicId),
@@ -40,6 +40,7 @@ export class IssueManager {
 
         try {
             const response = await axios.post(HttpConstants.issueEndpoint, data, { headers: HttpConstants.commomHeaders });
+            console.log('Issue created:', response.data);
             return response.data
         } catch (error) {
             console.error('There was an error making the request:', error);

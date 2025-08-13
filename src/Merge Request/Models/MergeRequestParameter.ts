@@ -5,5 +5,6 @@ export enum MergeRequesParameters {
     IssueDescription = "--issue-description",
     RelatedIssue = "-r",
     IssueToClose = "-c",
-    Labels = "-l"
+    Labels = "-l",
+    Milestone = "-m"
 }

@@ -15,8 +15,4 @@ export class ConfigManager {
     static getReviewerIds(): number[] {
         return config.reviewerIds;
     }
-
-    static getMilestoneId(): number {
-        return config.milestoneId;
-    }
 }

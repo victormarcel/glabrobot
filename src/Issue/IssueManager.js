@@ -42,7 +42,7 @@ class IssueManager {
         return __awaiter(this, void 0, void 0, function* () {
             const data = {
                 assignee_id: ConfigManager_1.ConfigManager.getAssigneeId(),
-                milestone_id: ConfigManager_1.ConfigManager.getMilestoneId(),
+                milestone_id: CommandLineManager_1.CommandLineManager.extractParameter(IssueParameter_1.IssueParameter.Milestone),
                 title: title,
                 description: description,
                 epic_id: CommandLineManager_1.CommandLineManager.extractParameter(IssueParameter_1.IssueParameter.EpicId),
@@ -51,6 +51,7 @@ class IssueManager {
             };
             try {
                 const response = yield axios_1.default.post(Constants_1.HttpConstants.issueEndpoint, data, { headers: Constants_1.HttpConstants.commomHeaders });
+                console.log('Issue created:', response.data);
                 return response.data;
             }
             catch (error) {

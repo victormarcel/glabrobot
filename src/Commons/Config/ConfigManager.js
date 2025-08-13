@@ -12,8 +12,5 @@ class ConfigManager {
     static getReviewerIds() {
         return config.reviewerIds;
     }
-    static getMilestoneId() {
-        return config.milestoneId;
-    }
 }
 exports.ConfigManager = ConfigManager;

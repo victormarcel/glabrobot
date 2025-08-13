@@ -38,7 +38,7 @@ export class MergeRequestManager {
                 title: title,
                 description: description,
                 labels: (CommandLineManager.extractParameter(MergeRequesParameters.Labels) || "").split(","),
-                milestone_id: ConfigManager.getMilestoneId(),
+                milestone_id: parseInt(CommandLineManager.extractParameter(MergeRequesParameters.Milestone) || ""),
                 remove_source_branch: true
             };
     

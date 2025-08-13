@@ -10,4 +10,5 @@ var MergeRequesParameters;
     MergeRequesParameters["RelatedIssue"] = "-r";
     MergeRequesParameters["IssueToClose"] = "-c";
     MergeRequesParameters["Labels"] = "-l";
+    MergeRequesParameters["Milestone"] = "-m";
 })(MergeRequesParameters || (exports.MergeRequesParameters = MergeRequesParameters = {}));

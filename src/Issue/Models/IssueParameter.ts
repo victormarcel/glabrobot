@@ -3,5 +3,6 @@ export enum IssueParameter {
     Description = "-d",
     EpicId = "-e",
     Weight = "-w",
-    Labels = "-l"
+    Labels = "-l",
+    Milestone = "-m"
 }
